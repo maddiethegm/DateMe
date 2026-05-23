@@ -1,0 +1,26 @@
+{
+  "name": "dateme-api",
+  "version": "0.0.1",
+  "description": "A scheme to collect & display data about my dates",
+  "keywords": [
+    "dating",
+    "social",
+    "socialmedia",
+    "data"
+  ],
+  "homepage": "https://github.com/maddiethegm/dateme#readme",
+  "bugs": {
+    "url": "https://github.com/maddiethegm/dateme/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/maddiethegm/dateme.git"
+  },
+  "license": "MIT",
+  "author": "Madeline Williams",
+  "type": "commonjs",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  }
+}
