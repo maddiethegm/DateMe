@@ -4,10 +4,9 @@ import json
 import requests
 from cryptography.fernet import Fernet
 
-# Define config file path
+# Check if config.py exists; if not, prompt the user to create it
 config_file = 'config.py'
 
-# Step 1: Check for existing config file; create if not found
 if not os.path.exists(config_file):
     print("Configuration file 'config.py' not found. Creating a new one...")
     
@@ -15,29 +14,32 @@ if not os.path.exists(config_file):
     api_url = input("Enter API URL (e.g., https://your-api-endpoint.com/api/upload): ")
     client_id = input("Enter your CLIENT_ID: ")
     client_secret = input("Enter your CLIENT_SECRET: ")
-    encryption_key = input("Enter your ENCRYPTION_KEY (32-byte key, e.g. 'your-32-byte-key-here'): ")
-    csv_file_path = input("Enter the path to your CSV file (e.g., reviews.csv): ")
 
     # Write the config file
     with open(config_file, 'w') as f:
         f.write(f"API_URL = \"{api_url}\"\n")
         f.write(f"CLIENT_ID = \"{client_id}\"\n")
         f.write(f"CLIENT_SECRET = \"{client_secret}\"\n")
-        f.write(f"ENCRYPTION_KEY = b\"{encryption_key}\"\n")
-        f.write(f"CSV_FILE_PATH = \"{csv_file_path}\"\n")
+        f.write("ENABLE_ENCRYPTION = False\n")
+        f.write(f"CSV_FILE_PATH = \"C:/Users/maddiethegm/Documents/Date Review (responses).csv\"\n")
 
     print("✅ Configuration file 'config.py' has been created.")
 else:
     print("✅ Found existing configuration file: config.py.")
 
-# Step 2: Load configuration from config.py
-from config import API_URL, CLIENT_ID, CLIENT_SECRET, ENCRYPTION_KEY, CSV_FILE_PATH
+# Load configuration from config.py
+from config import API_URL, CLIENT_ID, CLIENT_SECRET, ENABLE_ENCRYPTION, CSV_FILE_PATH
 
-# Initialize Fernet for encryption (ENCRYPTION_KEY must be bytes)
-if isinstance(ENCRYPTION_KEY, str):
-    ENCRYPTION_KEY = ENCRYPTION_KEY.encode()
+# Skip encryption if it's disabled
+if not ENABLE_ENCRYPTION:
+    print("⚠️ Encryption is disabled. Skipping encryption step.")
+else:
+    # Initialize Fernet for encryption (ENCRYPTION_KEY must be bytes)
+    ENCRYPTION_KEY = b"32-byte-long-key-here-please-use-a-real-one"  # You can add this in config.py if needed
+    if isinstance(ENCRYPTION_KEY, str):
+        ENCRYPTION_KEY = ENCRYPTION_KEY.encode()
 
-fernet = Fernet(ENCRYPTION_KEY)
+    fernet = Fernet(ENCRYPTION_KEY)
 
 def get_access_token():
     """Obtain an access token from the API using client credentials."""
@@ -60,10 +62,12 @@ def encrypt_data(data):
 
 def upload_reviews():
     # Step 1: Read CSV file
+    csv_file_path = CSV_FILE_PATH
+    reviews = []
+    
     try:
-        with open(CSV_FILE_PATH, mode='r', encoding='utf-8') as csvfile:
+        with open(csv_file_path, mode='r', encoding='utf-8') as csvfile:
             csv_reader = csv.DictReader(csvfile)
-            reviews = []
             for row in csv_reader:
                 # Map CSV fields to the schema we defined
                 review = {
@@ -91,25 +95,24 @@ def upload_reviews():
         print(f"Error reading CSV file: {e}")
         return
 
-    # Step 2: Encrypt the data
-    encrypted_data = encrypt_data(reviews)
+    # Step 2: Encrypt the data if encryption is enabled
+    if not ENABLE_ENCRYPTION:
+        print("⚠️ Encryption is disabled. Sending raw JSON.")
+        payload = json.dumps(reviews)
+    else:
+        encrypted_data = encrypt_data(reviews)
+        payload = encrypted_data
 
-    # Step 3: Get access token (if using OAuth)
-    try:
-        access_token = get_access_token()
-    except Exception as e:
-        print(f"Authentication failed: {e}")
-        return
-
-    # Step 4: Send encrypted payload to API
+    # Step 3: Send data to API using basic auth (Client ID + Secret)
     headers = {
-        "Authorization": f"Bearer {access_token}",
+        "Authorization": f"Basic {CLIENT_ID}:{CLIENT_SECRET}",
         "Content-Type": "application/json"
     }
+    payload = {"data": json.dumps(reviews)}
 
     response = requests.post(
         API_URL,
-        data=encrypted_data,
+        data=json.dumps(payload),
         headers=headers
     )
 

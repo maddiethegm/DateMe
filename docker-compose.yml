@@ -1,0 +1,39 @@
+version: '3.8'
+
+services:
+  backend-api:
+    build:
+      context: ./api
+      dockerfile: Dockerfile
+    container_name: dateme-api
+    ports:
+      - "3001:3001"
+    environment:
+      - NODE_ENV=production
+      - JWT_SECRET=${JWT_SECRET}
+    volumes:
+      - ./data-volumes/reviews.json:/app/data/reviews.json
+      - ./data-volumes/admin.json:/app/data/admin.json
+      - ./data-volumes/submissions.json:/app/data/submissions.json
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3001/api/admin/settings"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: dateme-frontend
+    ports:
+      - "3000:3000"
+    environment:
+      - REACT_APP_API_URL=http://backend-api:3001
+    depends_on:
+      - backend-api
+    restart: unless-stopped
+
+volumes:
+  data-volumes:

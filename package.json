@@ -1,7 +1,7 @@
 {
-  "name": "dateme-api",
+  "name": "dateme-frontend",
   "version": "0.0.1",
-  "description": "A scheme to collect & display data about my dates",
+  "description": "Maddie's dating review displayer",
   "keywords": [
     "dating",
     "social",
@@ -19,17 +19,12 @@
   "license": "MIT",
   "author": "Madeline Williams",
   "type": "commonjs",
-  "main": "server.js",
+  "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "dependencies": {
-    "bcrypt": "^6.0.0",
-    "bcryptjs": "^3.0.3",
-    "body-parser": "^2.2.2",
-    "crypto-js": "^4.2.0",
-    "dotenv": "^17.4.2",
-    "express": "^5.2.1",
-    "jsonwebtoken": "^9.0.3"
+    "bootstrap": "^5.3.8",
+    "chokidar": "^5.0.0"
   }
 }

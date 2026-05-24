@@ -1,0 +1,213 @@
+/* DateMe/frontend/src/App.css  */
+
+:root {
+    --primary-color: #ec4899; /* Default fallback */
+}
+
+.navbar-brand {
+    font-weight: 700;
+    color: var(--primary-color) !important;
+    font-size: 1.5rem;
+    letter-spacing: 2px;
+
+}
+
+/* Dynamic theme support */
+.gradient-text {
+    background: linear-gradient(90deg, var(--primary-color), #a855f7, var(--primary-color));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-size: 200% auto;
+    animation: gradient-shift 3s ease infinite;
+}
+
+/* Navbar Styling - Fixed Dark Background */
+.navbar {
+    background: rgba(18, 18, 24, 0.95) !important; /* Override Bootstrap dark blue */
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid rgba(236, 72, 153, 0.2);
+}
+
+
+
+/* Main Container */
+.App {
+    min-height: 100vh;
+    padding-top: 2rem;
+}
+
+/* Card Background with Better Contrast */
+.card {
+    background: linear-gradient(145deg, #1a1a2e, #222238) !important; /* Override Bootstrap */
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 1rem;
+    backdrop-filter: blur(10px);
+    transition: all 0.3s ease;
+    overflow: hidden;
+}
+
+.card:hover {
+    transform: translateY(-4px);
+    box-shadow: 
+        0 20px 40px rgba(255, 69, 125, 0.2),
+        0 0 20px rgba(147, 112, 255, 0.3);
+    border-color: rgba(255, 69, 125, 0.3);
+}
+
+/* Card Body Text - Fixed Visibility */
+.card-body p {
+    color: #d1d5e0 !important; /* Light text instead of dark grey */
+}
+
+.card-title, .card-text, h5, p, h6 {
+    color: #d1d5e0; /* Lighter text for better contrast */
+    font-weight: 400;
+}
+
+/* Badges & Ratings - Enhanced Colors */
+.badge {
+    background: linear-gradient(90deg, #ec4899, #a855f7);
+    font-weight: 600;
+    box-shadow: 0 2px 10px rgba(236, 72, 153, 0.3);
+}
+
+/* Progress Bars - Better Visibility */
+.progress {
+    background-color: #2d2d45 !important; /* Darker background for contrast */
+    border-radius: 8px;
+    height: 10px;
+    margin-bottom: 8px;
+}
+
+.progress-bar {
+    background: linear-gradient(90deg, #ec4899, #a855f7);
+    position: relative;
+    overflow: hidden;
+}
+
+.progress-bar::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(
+        90deg,
+        rgba(255, 255, 255, 0) 0%,
+        rgba(255, 255, 255, 0.3) 50%,
+        rgba(255, 255, 255, 0) 100%
+    );
+    animation: shimmer 2s infinite;
+}
+
+@keyframes shimmer {
+    0% { transform: translateX(-100%); }
+    100% { transform: translateX(100%); }
+}
+
+/* Text & Typography - All Light Text */
+.text-muted {
+    color: #9ca3af !important; /* Light muted instead of dark grey */
+}
+
+small.text-muted {
+    color: #758c9a;
+    font-size: 0.75rem;
+}
+
+/* Hoverable Links */
+a:not([href]) {
+    cursor: default;
+}
+
+/* Empty State */
+.text-center.text-muted.h4 {
+    background: rgba(26, 26, 46, 0.95);
+    padding: 3rem;
+    border-radius: 1rem;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Floating Gradient Effects */
+.gradient-text {
+    background: linear-gradient(90deg, #ec4899, #a855f7, #ec4899);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-size: 200% auto;
+    animation: gradient-shift 3s ease infinite;
+}
+
+@keyframes gradient-shift {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+/* Glow Effects on Cards */
+@keyframes glow-pulse {
+    0%, 100% { box-shadow: 0 0 20px rgba(236, 72, 153, 0.1); }
+    50% { box-shadow: 0 0 40px rgba(168, 85, 247, 0.2); }
+}
+
+/* Responsive Grid Adjustments */
+@media (max-width: 768px) {
+    .App {
+        padding-top: 1rem;
+    }
+
+    .row > [class^="col-"] {
+        margin-bottom: 1rem;
+    }
+}
+
+/* Rating Badge Colors - Enhanced */
+.bg-success, .badge-success {
+    background: linear-gradient(90deg, #28a745, #20c997) !important;
+    box-shadow: 0 2px 10px rgba(40, 167, 69, 0.3);
+}
+
+.bg-warning {
+    background: linear-gradient(90deg, #ffc107, #e0a800) !important;
+    box-shadow: 0 2px 10px rgba(255, 193, 7, 0.3);
+}
+
+.bg-danger {
+    background: linear-gradient(90deg, #dc3545, #ff6b6b) !important;
+    box-shadow: 0 2px 10px rgba(220, 53, 69, 0.3);
+}
+
+/* Comment List Styling */
+.list-unstyled li {
+    color: #d1d5e0; /* Light text for comments */
+    line-height: 1.6;
+}
+
+.list-unstyled li::before {
+    content: "• ";
+    color: #ec4899;
+    font-weight: bold;
+}
+
+/* Location, Date, Paid By - Better Contrast */
+.fw-semibold {
+    color: #e0e0e0 !important;
+}
+
+/* DateMe/DateMe/frontend/src/modal.css (NEW) */
+.modal {
+    display: none; /* Hidden by default, shown via inline style */
+}
+
+.modal-backdrop.show {
+    background-color: rgba(0, 0, 0, 0.5);
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+.modal.show .modal-dialog {
+    animation: fadeIn 0.2s ease-out;
+}
