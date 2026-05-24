@@ -3,9 +3,7 @@ networks:
     external: true
 services:
   backend-api:
-    build:
-      context: ./api
-      dockerfile: Dockerfile
+    build: ./DateMe/api
     container_name: dateme-api
     environment:
       - NODE_ENV=production
@@ -13,9 +11,8 @@ services:
     networks:
       - nginx
     volumes:
-      - ./data-volumes/reviews.json:/app/data/reviews.json
-      - ./data-volumes/admin.json:/app/data/admin.json
-      - ./data-volumes/submissions.json:/app/data/submissions.json
+      - /opt/dateme/api/reviews.json:/app/data/reviews.json
+      - /opt/dateme/api/admin.json:/app/data/admin.json
     restart: unless-stopped
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:3001/api/admin/settings"]
@@ -35,6 +32,9 @@ services:
     restart: unless-stopped
     networks:
       - nginx
+    volumes:
+      - /opt/dateme/frontend:/usr/share/nginx/html
+
 
 volumes:
   data-volumes:

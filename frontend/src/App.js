@@ -259,17 +259,6 @@ function App() {
                         <ReviewList reviews={reviews} />
                     )}
 
-                    {/* ✅ Keep the submit button */}
-                    <div className="text-center mt-4">
-                        <button 
-                            className="btn btn-outline-info rounded-pill px-4"
-                            onClick={handleOpenReviewFormModal}
-                            disabled={loading || error}
-                        >
-                            💬 Submit Your Review
-                        </button>
-                    </div>
-
                     {/* Login Modal */}
                     <LoginFormModal 
                         isOpen={showLoginModal}
