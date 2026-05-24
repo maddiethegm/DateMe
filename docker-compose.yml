@@ -3,7 +3,7 @@ networks:
     external: true
 services:
   backend-api:
-    build: ./DateMe/api
+    build: /opt/dateme/source/api
     container_name: dateme-api
     environment:
       - NODE_ENV=production
@@ -22,7 +22,7 @@ services:
 
   frontend:
     build:
-      context: ./frontend
+      context: /opt/dateme/source/frontend
       dockerfile: Dockerfile
     container_name: dateme-frontend
     environment:

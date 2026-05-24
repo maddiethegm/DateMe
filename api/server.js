@@ -23,18 +23,14 @@ const configCache = configInit(); // Store sanitized config
 
 const app = express();
 const PORT = process.env.PORT || 3001;
+const cors = require('cors');
+app.use(cors({
+    origin: 'https://date.maddiethegm.xyz', // Your production domain
+    credentials: true, // Allow cookies if needed
+    methods: ['GET','POST','PUT','DELETE','OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization']
+}));
 
-// ✅ Add CORS middleware FIRST
-app.use((req, res, next) => {
-    res.header('Access-Control-Allow-Origin', '*');
-    res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
-    res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization');
-
-    if (req.method === 'OPTIONS') {
-        return res.sendStatus(200);
-    }
-    next();
-});
 
 // Parse JSON bodies
 app.use(bodyParser.json());
@@ -44,7 +40,7 @@ console.log('📂 Mounting routes...');
 
 // 🆕 UPDATED: Public reviews endpoint (reads from consolidated file, filters hidden)
 app.get('/api/reviews', (req, res) => {
-    const REVIEW_FILE = path.join(__dirname, 'reviews.json');
+    const REVIEW_FILE = '/app/data/reviews.json';
 
     try {
         console.log('📡 GET /api/reviews requested');

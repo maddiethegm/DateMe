@@ -1,11 +1,12 @@
-// DateMe/frontend/src/components/ReviewFormModal.jsx - REVIEW FORM COMPONENT (UPDATED WITH NEW FIELDS)
+// DateMe/frontend/src/components/ReviewFormModal.jsx - REVIEW FORM COMPONENT (UPDATED WITH displayName)
 import React, { useState } from 'react';
 import api, { buildApiUrl } from '../utils/api'; // Import API utility for URL construction
 
+
 const ReviewFormModal = ({ isOpen, onClose, onFormSubmit }) => {
     const [formData, setFormData] = useState({
-        // User info (optional since we can't authenticate anonymous users)
-        displayName: '',
+        // User info (optional but recommended for better reviews)
+        displayName: '',  // ✅ REMOVED '//' comment, keeping state
         
         // Location and date
         location: '',
@@ -25,7 +26,7 @@ const ReviewFormModal = ({ isOpen, onClose, onFormSubmit }) => {
         connectionRating: 3,
         
         // ✅ NEW FIELD 2: Would See Again (Yes/No/Maybe)
-        wouldSeeAgain: 'no',
+        wouldSeeAgain: 'yes',
         
         // Optional text fields
         dateComments: '',
@@ -34,9 +35,11 @@ const ReviewFormModal = ({ isOpen, onClose, onFormSubmit }) => {
         adviceForMaddie: ''
     });
 
+
     const [errors, setErrors] = useState({});
     const [loading, setLoading] = useState(false);
     const [submitting, setSubmitting] = useState(false);
+
 
     // ✅ VALIDATE FORM BEFORE SUBMISSION (Added new field validation)
     const validateForm = () => {
@@ -59,14 +62,19 @@ const ReviewFormModal = ({ isOpen, onClose, onFormSubmit }) => {
             newErrors['wouldSeeAgain'] = 'Please select whether you would see this person again (yes/no/maybe)';
         }
 
+
         // Check location is filled in
         if (!formData.location.trim()) {
             newErrors.location = 'Please enter your location';
         }
 
+        // ✅ FIX: Validation should pass even if displayName is empty!
+        // We only error if they typed something but it's invalid (which won't happen here)
+        
         setErrors(newErrors);
         return Object.keys(newErrors).length === 0;
     };
+
 
     // ✅ Handle form submission to backend API
     const handleSubmit = async (e) => {
@@ -80,8 +88,10 @@ const ReviewFormModal = ({ isOpen, onClose, onFormSubmit }) => {
         
         setLoading(true);
 
+
         try {
             console.log('📤 Submitting review to backend API...');
+
 
             const formattedFormData = {
                 ...formData,
@@ -95,11 +105,13 @@ const ReviewFormModal = ({ isOpen, onClose, onFormSubmit }) => {
                 adminComment: "",
                 status: "public_submission",
                 
-                // Use ID field or generate one
+                // ✅ FIX: Only generate ID if displayName is empty (for anonymous users)
                 id: formData.displayName || Math.random().toString(36).substring(2, 8)
             };
 
+
             console.log('📦 Review data to submit:', JSON.stringify(formattedFormData, null, 2));
+
 
             // ✅ API ENDPOINT for public review submission (new endpoint needed in backend)
             const response = await fetch(buildApiUrl('/api/submit/review'), {
@@ -109,6 +121,7 @@ const ReviewFormModal = ({ isOpen, onClose, onFormSubmit }) => {
                 },
                 body: JSON.stringify(formattedFormData)
             });
+
 
             if (!response.ok) {
                 const errorText = await response.text();
@@ -136,6 +149,7 @@ const ReviewFormModal = ({ isOpen, onClose, onFormSubmit }) => {
                             body: JSON.stringify({ reviews: [formattedFormData] })
                         });
 
+
                         if (response2.ok) {
                             console.log('✅ Review uploaded via admin endpoint');
                             
@@ -155,6 +169,7 @@ const ReviewFormModal = ({ isOpen, onClose, onFormSubmit }) => {
                 throw new Error('Review submission failed. Please try again.');
             }
 
+
             const result = await response.json();
             console.log('✅ Review submitted successfully:', result);
             
@@ -169,6 +184,7 @@ const ReviewFormModal = ({ isOpen, onClose, onFormSubmit }) => {
             setLoading(false);
         }
     };
+
 
     // ✅ Handle input changes for text fields (Same as before)
     const handleInputChange = (e) => {
@@ -185,6 +201,7 @@ const ReviewFormModal = ({ isOpen, onClose, onFormSubmit }) => {
             setErrors({});
         }
     };
+
 
     // ✅ Handle rating dropdown change - Update single rating and clear error (Same as before)
     const handleRatingChange = (field, value) => {
@@ -213,6 +230,7 @@ const handleWouldSeeAgainChange = (value) => {
     }
 };
 
+
     const handleClose = () => {
         // ✅ Reset form on close (Added new fields)
         setFormData({
@@ -235,10 +253,13 @@ const handleWouldSeeAgainChange = (value) => {
         setErrors({});
     };
 
+
     if (!isOpen) return null;
+
 
     return (
         <div className="modal d-block" style={{ display: 'block' }} tabIndex="-1">
+
 
             {/* Modal dialog */}
             <div className="modal-dialog modal-dialog-centered max-w-96">
@@ -257,6 +278,7 @@ const handleWouldSeeAgainChange = (value) => {
                         ></button>
                     </div>
 
+
                     {/* Modal body */}
                     <div className="modal-body p-4">
                         
@@ -266,11 +288,13 @@ const handleWouldSeeAgainChange = (value) => {
                             </div>
                         )}
 
+
                         {Object.keys(errors).length > 0 && !errors.submitError && (
                             <div className="alert alert-warning mb-3 rounded-pill shadow-sm" role="alert">
                                 ⚠️ {errors.overall || 'Please fill in all required fields'}
                             </div>
                         )}
+
 
                         <form onSubmit={handleSubmit}>
                             
@@ -279,7 +303,23 @@ const handleWouldSeeAgainChange = (value) => {
                                 <h6 className="fw-bold text-primary mb-3">📋 Basic Information</h6>
                                 
                                 <div className="row g-3">
-                                    <div className="col-md-8">
+                                    <div className="col-md-12">
+                                        <label htmlFor="displayName" className="form-label text-muted small fw-semibold">
+                                            Your Name
+                                        </label>
+                                        <input
+                                            type="text"
+                                            id="displayName"
+                                            name="displayName"
+                                            className={`form-control border-primary`}
+                                            value={formData.displayName}
+                                            onChange={handleInputChange}
+                                            placeholder="(leave empty for anonymous)"
+                                        />
+                                        {/* ✅ FIX: Added displayName input field */}
+                                    </div>
+
+                                    <div className="col-md-12">
                                         <label htmlFor="location" className="form-label text-muted small fw-semibold">
                                             Location (Required)
                                         </label>
@@ -298,9 +338,10 @@ const handleWouldSeeAgainChange = (value) => {
                                         )}
                                     </div>
 
-                                    <div className="col-md-4">
+
+                                    <div className="col-md-12">
                                         <label htmlFor="date" className="form-label text-muted small fw-semibold">
-                                            Date (Optional)
+                                            Date of Experience (Optional)
                                         </label>
                                         <input
                                             type="date"
@@ -311,6 +352,7 @@ const handleWouldSeeAgainChange = (value) => {
                                             onChange={handleInputChange}
                                         />
                                     </div>
+
 
                                     <div className="col-md-12">
                                         <label htmlFor="paymentResponsibility" className="form-label text-muted small fw-semibold">
@@ -328,6 +370,7 @@ const handleWouldSeeAgainChange = (value) => {
                                     </div>
                                 </div>
                             </div>
+
 
                             {/* Rating Section - ✅ FIXED: DROPDOWN INSTEAD OF SLIDERS */}
                             <div className="mb-4">
@@ -347,6 +390,7 @@ const handleWouldSeeAgainChange = (value) => {
                                         ))}
                                     </select>
                                 </div>
+
 
                                 {/* Individual Rating Breakdown - ✅ FIXED: DROPOWNS INSTEAD OF SLIDERS */}
                                 <div className="row mt-4">
@@ -376,12 +420,12 @@ const handleWouldSeeAgainChange = (value) => {
                                         </div>
                                     ))}
                                 </div>
-
                             </div>
+
 
                             {/* ✅ NEW SECTION: Would See Again (Yes/No/Maybe) */}
                             <div className="mb-4">
-                                <h6 className="fw-bold text-primary mb-3">🔄 Would You See Her Again?</h6>
+                                <h6 className="fw-bold text-primary mb-3">🔄 Would You See Maddie Again?</h6>
                                 
                                 {/* ✅ NEW FIELD: Would See Again Dropdown */}
                                 <div className="mb-2">
@@ -398,6 +442,7 @@ const handleWouldSeeAgainChange = (value) => {
                                     </select>
                                 </div>
                             </div>
+
 
                             {/* Comments Section */}
                             <div className="mb-4">
@@ -418,6 +463,7 @@ const handleWouldSeeAgainChange = (value) => {
                                     ></textarea>
                                 </div>
 
+
                                 <div className="mb-3">
                                     <label htmlFor="postDateComments" className="form-label text-muted small fw-semibold">
                                         Post-Date Experience
@@ -433,36 +479,39 @@ const handleWouldSeeAgainChange = (value) => {
                                     ></textarea>
                                 </div>
 
-                                    <div className="mb-3">
-                                        <label htmlFor="adviceForOthers" className="form-label text-muted small fw-semibold">
-                                            Advice for Others
-                                        </label>
-                                        <textarea
-                                            id="adviceForOthers"
-                                            name="adviceForOthers"
-                                            className="form-control border-primary"
-                                            rows={2}
-                                            value={formData.adviceForOthers}
-                                            onChange={handleInputChange}
-                                            placeholder="What would you suggest to others going on a similar date?"
-                                        ></textarea>
-                                    </div>
 
-                                    <div className="mb-3">
-                                        <label htmlFor="adviceForMaddie" className="form-label text-muted small fw-semibold">
-                                            Message for Maddie
-                                        </label>
-                                        <textarea
-                                            id="adviceForMaddie"
-                                            name="adviceForMaddie"
-                                            className="form-control border-primary"
-                                            rows={2}
-                                            value={formData.adviceForMaddie}
-                                            onChange={handleInputChange}
-                                            placeholder="Any specific message for Maddie?"
-                                        ></textarea>
-                                    </div>
+                                <div className="mb-3">
+                                    <label htmlFor="adviceForOthers" className="form-label text-muted small fw-semibold">
+                                        Advice for Others
+                                    </label>
+                                    <textarea
+                                        id="adviceForOthers"
+                                        name="adviceForOthers"
+                                        className="form-control border-primary"
+                                        rows={2}
+                                        value={formData.adviceForOthers}
+                                        onChange={handleInputChange}
+                                        placeholder="What would you suggest to others going on a similar date?"
+                                    ></textarea>
+                                </div>
+
+
+                                <div className="mb-3">
+                                    <label htmlFor="adviceForMaddie" className="form-label text-muted small fw-semibold">
+                                        Message for Maddie
+                                    </label>
+                                    <textarea
+                                        id="adviceForMaddie"
+                                        name="adviceForMaddie"
+                                        className="form-control border-primary"
+                                        rows={2}
+                                        value={formData.adviceForMaddie}
+                                        onChange={handleInputChange}
+                                        placeholder="Any specific message for Maddie?"
+                                    ></textarea>
+                                </div>
                             </div>
+
 
                             {/* Submit Button */}
                             <div className="d-grid gap-2 mt-4">
@@ -474,6 +523,7 @@ const handleWouldSeeAgainChange = (value) => {
                                     {loading ? '🔄 Checking...' : submitting ? '✉️ Submitting...' : '✅ Submit Review'}
                                 </button>
 
+
                                 <button
                                     type="button"
                                     className="btn btn-outline-secondary rounded-pill"
@@ -483,11 +533,8 @@ const handleWouldSeeAgainChange = (value) => {
                                     ❌ Cancel
                                 </button>
                             </div>
-
                         </form>
-
                     </div>
-
                     {/* Modal footer */}
                     <div className="modal-footer border-top-0 justify-content-center p-0">
                         {/* Empty footer to keep modal clean */}
@@ -497,5 +544,6 @@ const handleWouldSeeAgainChange = (value) => {
         </div>
     );
 };
+
 
 export default ReviewFormModal;

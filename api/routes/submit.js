@@ -10,8 +10,8 @@ const configInit = require('../config').initialize;
 const { verifyPassword } = require('../middleware/auth');
 
 // Path to the JSON file where reviews will be stored
-const REVIEW_FILE_PATH = path.join(__dirname, '..', 'reviews.json');
-const SUBMIT_FILE_PATH = path.join(__dirname, '..', 'submissions.json'); // For tracking submissions
+const REVIEW_FILE_PATH = '/app/data/reviews.json';
+const SUBMIT_FILE_PATH = '/app/data/reviews.json'; // For tracking submissions
 
 /**
  * Helper: Read reviews from file and return as array

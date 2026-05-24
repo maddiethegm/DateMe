@@ -11,6 +11,7 @@ RUN npm install --production
 
 # Copy application source code
 COPY server.js ./
+COPY config.js ./
 COPY routes/ ./routes/
 COPY middleware/ ./middleware/
 

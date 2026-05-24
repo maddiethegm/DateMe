@@ -115,7 +115,7 @@ const ReviewList = ({ reviews }) => {
                             <h6 className="fw-semibold mb-2 gradient-text">Would see again:</h6>
                                 <div className="mb-3 p-2">
                                     <p className="text-muted small mb-0">
-                                        {review.wouldSeeAgain === 'yes' && "😊 Would see again"}
+                                        {review.wouldSeeAgain === 'yes' && "😊 Definitely!"}
                                         {review.wouldSeeAgain === 'no' && "😕 Probably not"}
                                         {review.wouldSeeAgain === 'maybe' && "🤷 Maybe..."}
                                     </p>

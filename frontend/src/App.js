@@ -156,9 +156,9 @@ function App() {
         window.location.hash = '';
         
         // Optionally redirect to homepage
-        setTimeout(() => {
+/*        setTimeout(() => {
             window.location.href = 'http://localhost:3000/';
-        }, 100);
+        }, 100); */
     };
 
     return configLoaded ? (

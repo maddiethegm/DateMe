@@ -14,7 +14,7 @@ const configInit = require('../config').initialize; // Config loader (for routes
  */
 function readReviews() {
     try {
-        const REVIEW_FILE_PATH = path.join(__dirname, '..', 'reviews.json');
+        const REVIEW_FILE_PATH = '/app/data/reviews.json';
         
         if (!fs.existsSync(REVIEW_FILE_PATH)) {
             console.log('   [READ] Creating empty reviews.json');
@@ -35,11 +35,11 @@ function readReviews() {
 function writeReviews(reviews) {
     try {
         const jsonContent = JSON.stringify(reviews, null, 2);
-        fs.writeFileSync(path.join(__dirname, '..', 'reviews.json'), jsonContent, 'utf-8');
+        fs.writeFileSync('/app/data/reviews.json', jsonContent, 'utf-8');
         console.log(`   [WRITE] Successfully wrote ${jsonContent.length} bytes to reviews.json`);
         
         // Verify write succeeded by reading back
-        const verifiedReviews = JSON.parse(fs.readFileSync(path.join(__dirname, '..', 'reviews.json'), 'utf-8'));
+        const verifiedReviews = JSON.parse(fs.readFileSync('/app/data/reviews.json', 'utf-8'));
         return verifiedReviews;
     } catch (err) {
         console.error('   [WRITE] Failed:', err.message);
@@ -190,7 +190,8 @@ router.post('/login', async (req, res) => {
                     username: admin.username,
                     displayName: admin.displayName,
                     role: admin.role,
-                    expiresIn: '24h'
+                    expiresIn: '24h',
+                    token: token
                 });
             }
         }
