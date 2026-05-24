@@ -19,7 +19,7 @@ RUN npm run build --if-present
 
 # Final stage: Use lighter Nginx or Node.js static server
 # Option 1: Lightweight Nginx (recommended)
-FROM nginx:linuxserver/nginx
+FROM nginx:alpine
 
 # Copy built files to Nginx serving directory
 COPY --from=build-stage /app/src/build /usr/share/nginx/html
