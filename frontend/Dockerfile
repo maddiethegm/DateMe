@@ -13,8 +13,7 @@ COPY src/ ./src/
 COPY public/ ./public/
 
 # Build React app for production
-ENV CI=true
-ENV REACT_APP_API_URL=http://localhost:3001
+ENV REACT_APP_API_URL=http://date.maddiethegm.xyz:3001/api
 RUN npm run build --if-present
 
 # Final stage: Use lighter Nginx or Node.js static server
