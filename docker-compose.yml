@@ -1,16 +1,17 @@
-version: '3.8'
-
+networks:
+  nginx:
+    external: true
 services:
   backend-api:
     build:
       context: ./api
       dockerfile: Dockerfile
     container_name: dateme-api
-    ports:
-      - "3001:3001"
     environment:
       - NODE_ENV=production
       - JWT_SECRET=${JWT_SECRET}
+    networks:
+      - nginx
     volumes:
       - ./data-volumes/reviews.json:/app/data/reviews.json
       - ./data-volumes/admin.json:/app/data/admin.json
@@ -27,13 +28,13 @@ services:
       context: ./frontend
       dockerfile: Dockerfile
     container_name: dateme-frontend
-    ports:
-      - "3000:3000"
     environment:
       - REACT_APP_API_URL=http://backend-api:3001
     depends_on:
       - backend-api
     restart: unless-stopped
+    networks:
+      - nginx
 
 volumes:
   data-volumes:
