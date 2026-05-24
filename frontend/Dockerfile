@@ -1,5 +1,5 @@
 # DateMe/frontend/Dockerfile - Static Build Only
-FROM node:24-alpine as build-stage
+FROM node:24-alpine AS build-stage
 
 WORKDIR /app/src
 
