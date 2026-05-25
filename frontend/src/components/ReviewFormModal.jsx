@@ -26,7 +26,7 @@ const ReviewFormModal = ({ isOpen, onClose, onFormSubmit }) => {
         connectionRating: 3,
         
         // ✅ NEW FIELD 2: Would See Again (Yes/No/Maybe)
-        wouldSeeAgain: 'yes',
+        wouldSeeAgain: '',
         
         // Optional text fields
         dateComments: '',
@@ -57,10 +57,10 @@ const ReviewFormModal = ({ isOpen, onClose, onFormSubmit }) => {
             newErrors['overallExperience'] = 'Please select an Overall Experience rating (1-5)';
         }
         
-        // ✅ NEW: Check would see again field
-        if (!formData.wouldSeeAgain || !['yes', 'no', 'maybe'].includes(formData.wouldSeeAgain)) {
+/*        // ✅ NEW: Check would see again field
+        if (!formData.wouldSeeAgain || !['yes', 'no', 'maybe', ''].includes(formData.wouldSeeAgain)) {
             newErrors['wouldSeeAgain'] = 'Please select whether you would see this person again (yes/no/maybe)';
-        }
+        }*/
 
 
         // Check location is filled in
@@ -354,7 +354,7 @@ const handleWouldSeeAgainChange = (value) => {
                                     </div>
 
 
-                                    <div className="col-md-12">
+                                {/*    <div className="col-md-12">
                                         <label htmlFor="paymentResponsibility" className="form-label text-muted small fw-semibold">
                                             Who Paid? (Optional)
                                         </label>
@@ -367,7 +367,7 @@ const handleWouldSeeAgainChange = (value) => {
                                             onChange={handleInputChange}
                                             placeholder="e.g., Maddie paid for everything"
                                         />
-                                    </div>
+                                    </div> */}
                                 </div>
                             </div>
 
@@ -396,7 +396,7 @@ const handleWouldSeeAgainChange = (value) => {
                                 <div className="row mt-4">
                                     {[
                                         { name: 'planning', label: 'Planning' },
-                                        { name: 'smallTalk', label: 'Small Talk' },
+                                        { name: 'smallTalk', label: 'Banter' },
                                         { name: 'safety', label: 'Safety' },
                                         { name: 'connection', label: 'Connection' }
                                     ].map(({ name, label }) => (
@@ -436,6 +436,7 @@ const handleWouldSeeAgainChange = (value) => {
                                         id="wouldSeeAgainSelect"
                                         style={{ width: '100%' }} // Ensure full width
                                     >
+                                        <option value=""></option>
                                         <option value="yes">😊 Yes, I'd see her again</option>
                                         <option value="no">😕 No, probably not</option>
                                         <option value="maybe">🤷 Maybe...</option>

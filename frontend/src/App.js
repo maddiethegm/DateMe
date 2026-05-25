@@ -229,22 +229,7 @@ function App() {
             ) : (
                 /* Public View */
                 <>
-                    {/* Stats Summary */}
-                    <div className="row mb-3">
-                        <div className="col-12 text-center">
-                            {loading ? (
-                                <span className="badge bg-primary rounded-pill p-2">Loading...</span>
-                            ) : error ? (
-                                <span className="badge bg-danger rounded-pill p-2">
-                                    ❌ Error: {error}
-                                </span>
-                            ) : (
-                                <span className="badge bg-primary rounded-pill p-2">
-                                    📊 Total Reviews: {reviews.length}
-                                </span>
-                            )}
-                        </div>
-                    </div>
+
 
                     {/* Review Grid */}
                     {loading ? (
@@ -279,7 +264,22 @@ function App() {
 
                 </>
             )}
-
+                    {/* Stats Summary */}
+                    <div className="row mb-3">
+                        <div className="col-12 text-center">
+                            {loading ? (
+                                <span className="badge bg-primary rounded-pill p-2">Loading...</span>
+                            ) : error ? (
+                                <span className="badge bg-danger rounded-pill p-2">
+                                    ❌ Error: {error}
+                                </span>
+                            ) : (
+                                <span className="badge bg-primary rounded-pill p-2">
+                                    📊 Total Reviews: {reviews.length}
+                                </span>
+                            )}
+                        </div>
+                    </div>
             {/* Footer */}
             <footer className="text-center text-muted py-3 mt-4 border-top border-secondary">
                 <small className="d-block">© {new Date().getFullYear()} DateME Reviews</small>

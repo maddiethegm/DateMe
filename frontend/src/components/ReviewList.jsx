@@ -67,7 +67,7 @@ const ReviewList = ({ reviews }) => {
                                     </div>
                                 </div>
                                 <div className="col-6">
-                                    <p className="text-muted small mb-1">Small Talk</p>
+                                    <p className="text-muted small mb-1">Banter</p>
                                     <div className="progress" style={{height: '8px', borderRadius: 0}}>
                                         <div 
                                             className="progress-bar bg-info text-dark" 
@@ -126,10 +126,10 @@ const ReviewList = ({ reviews }) => {
                             <h6 className="fw-semibold mb-2 gradient-text">💬 Comments</h6>
                             <ul className="list-unstyled small">
                                 {review.dateComments && (
-                                    <li className="mb-1">{review.dateComments}</li>
+                                    <li className="mb-1">About the date: {review.dateComments}</li>
                                 )}
                                 {review.postDateComments && (
-                                    <li className="mb-1">{review.postDateComments}</li>
+                                    <li className="mb-1">After: {review.postDateComments}</li>
                                 )}
                             </ul>
 
@@ -137,10 +137,10 @@ const ReviewList = ({ reviews }) => {
                             <h6 className="fw-semibold mb-2 gradient-text">📝 Tips</h6>
                             <ul className="list-unstyled small">
                                 {review.adviceForOthers && (
-                                    <li className="mb-1">{review.adviceForOthers}</li>
+                                    <li className="mb-1">For others: {review.adviceForOthers}</li>
                                 )}
                                 {review.adviceForMaddie && (
-                                    <li className="mb-1">{review.adviceForMaddie}</li>
+                                    <li className="mb-1">For Maddie: {review.adviceForMaddie}</li>
                                 )}
                             </ul>
 
