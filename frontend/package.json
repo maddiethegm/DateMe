@@ -7,7 +7,7 @@
     "@testing-library/jest-dom": "^6.9.1",
     "@testing-library/react": "^16.3.2",
     "@testing-library/user-event": "^13.5.0",
-    "axios": "^1.16.1",
+    "axios": "^1.18.0",
     "bootstrap": "^5.3.8",
     "chokidar": "^5.0.0",
     "fs": "^0.0.1-security",
